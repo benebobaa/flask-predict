@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import os
 import numpy as np
 import pandas as pd
@@ -48,6 +48,19 @@ print("Hasil prediksi: ", label_encoder[0])
 @app.route('/')
 def index():
     return jsonify({"Choo Choo": "Welcome to your Flask app 🚅"})
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    try:
+        tweet = request.form['tweet']
+        sequence = tokenizer.texts_to_sequences([tweet])
+        padded = pad_sequences(sequence, maxlen=maxlen, padding='post', truncating='post', value=0) 
+        category = model.predict(padded)
+        predicted = np.argmax(category, axis=-1)
+        predicted = np.vectorize({0: 'tidak kebakaran', 1: 'kebakaran', 2: 'penanganan'}.get)(predicted)
+        return {"data": [{"tweet": tweet},{"predict":predicted[0]}]}
+    except:
+        return {"data": [{"tweet": tweet},{"predict": "error"}]}
 
 
 if __name__ == '__main__':
