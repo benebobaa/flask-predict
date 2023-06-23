@@ -14,8 +14,7 @@ model.summary()
 app = Flask(__name__)
 
 
-data = pd.read_csv('/content/drive/MyDrive/NER_Project/tweets_clean.csv')
-data = data.drop(['date'], axis=1)
+data = dataset.drop(['date'], axis=1)
 data = data[data['label'] < 3]
 data['label'] = data['label'].replace([0.0, 1.0, 2.0], ['Not Related', 'Kebakaran', 'Pencegahan'])
 label = pd.get_dummies(data.label)
