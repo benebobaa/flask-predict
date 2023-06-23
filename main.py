@@ -57,9 +57,9 @@ def predict():
         category = model.predict(padded)
         predicted = np.argmax(category, axis=-1)
         predicted = np.vectorize({0: 'tidak kebakaran', 1: 'kebakaran', 2: 'penanganan'}.get)(predicted)
-        return {"data": [{"tweet": tweet},{"predict":predicted[0]}]}
+        return {"data": {"tweet": tweet,"predict":predicted[0]}}
     except:
-        return {"data": [{"tweet": tweet},{"predict": "error"}]}
+        return {"data": {"tweet": tweet,"predict":predicted[0]}}
 
 
 if __name__ == '__main__':
